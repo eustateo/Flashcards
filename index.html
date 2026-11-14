@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f7fb">
+    <title>Recall — Flashcards Study App</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Recall home">
+          <span class="brand-mark" aria-hidden="true">R</span>
+          <span>Recall</span>
+        </a>
+        <button class="button button-primary" id="new-deck-button" type="button">
+          New Deck
+        </button>
+      </header>
+
+      <p class="app-status" id="app-status" role="status" aria-live="polite" hidden></p>
+
+      <div class="workspace">
+        <aside class="sidebar" aria-labelledby="decks-heading">
+          <div class="sidebar-heading">
+            <h2 id="decks-heading">Your decks</h2>
+            <span class="deck-count" id="deck-count" aria-label="0 decks">0</span>
+          </div>
+          <ul class="deck-list" id="deck-list" aria-label="Deck list"></ul>
+          <p class="sidebar-hint" id="deck-list-hint">Your decks will show up here.</p>
+        </aside>
+
+        <main class="main-content">
+          <section class="study-panel" aria-labelledby="deck-heading">
+            <div class="study-header">
+              <div class="deck-title">
+                <p class="eyebrow">STUDY SPACE</p>
+                <h1 id="deck-heading">Choose a deck to begin</h1>
+              </div>
+
+              <div class="study-tools" aria-label="Deck tools">
+                <div class="search-field">
+                  <label for="card-search">Search cards</label>
+                  <input
+                    id="card-search"
+                    name="search"
+                    type="search"
+                    placeholder="Search your cards"
+                    disabled
+                    autocomplete="off"
+                  >
+                </div>
+                <button class="button button-secondary" id="shuffle-cards-button" type="button" disabled>
+                  Shuffle
+                </button>
+                <button class="button button-primary" id="new-card-button" type="button" disabled>
+                  New Card
+                </button>
+              </div>
+            </div>
+
+            <section class="card-stage" aria-label="Study card">
+              <article class="flashcard" id="study-card" aria-live="polite" hidden>
+                <div class="flashcard-inner" id="flashcard-inner">
+                  <div class="flashcard-face flashcard-front" id="card-front-face" aria-hidden="true" inert>
+                    <span class="card-face-label">FRONT</span>
+                    <p class="card-face-text" id="card-front-text"></p>
+                  </div>
+                  <div class="flashcard-face flashcard-back" id="card-back-face" aria-hidden="true" inert>
+                    <span class="card-face-label">BACK</span>
+                    <p class="card-face-text" id="card-back-text"></p>
+                  </div>
+                </div>
+              </article>
+              <div class="card-empty-state" id="card-empty-state" aria-live="polite">
+                <span class="card-sparkle" aria-hidden="true">✦</span>
+                <p class="empty-title" id="card-empty-title">Your next big idea starts here.</p>
+                <p class="empty-description" id="card-empty-description">
+                  Create a deck to add flashcards and start studying.
+                </p>
+              </div>
+              <div class="selected-card-actions" id="selected-card-actions" hidden>
+                <button class="button button-secondary" id="edit-card-button" type="button">
+                  Edit Card
+                </button>
+                <button class="button button-quiet" id="delete-card-button" type="button">
+                  Delete Card
+                </button>
+              </div>
+              <nav class="card-navigation" aria-label="Study card navigation">
+                <button class="button button-quiet" id="previous-card-button" type="button" disabled>
+                  <span aria-hidden="true">←</span> Previous
+                </button>
+                <button class="button button-secondary" id="flip-card-button" type="button" disabled aria-pressed="false">
+                  Flip
+                </button>
+                <button class="button button-quiet" id="next-card-button" type="button" disabled>
+                  Next <span aria-hidden="true">→</span>
+                </button>
+              </nav>
+              <p class="study-position" id="study-position" aria-live="polite" aria-atomic="true">
+                No cards
+              </p>
+            </section>
+
+            <section class="card-library" aria-labelledby="card-library-heading">
+              <div class="card-library-heading">
+                <h2 id="card-library-heading">Cards in this deck</h2>
+                <span class="card-library-count" id="card-library-count">0</span>
+              </div>
+              <ul class="card-list" id="card-list" aria-label="Cards in active deck"></ul>
+              <p class="card-list-empty" id="card-list-empty">Create a deck to see its cards here.</p>
+            </section>
+          </section>
+        </main>
+      </div>
+
+      <footer class="footer">
+        <p>Use ← / → to move between cards and Space to flip while studying.</p>
+        <p class="footer-shortcut">Your learning, one card at a time.</p>
+      </footer>
+    </div>
+
+    <dialog class="deck-dialog" id="deck-dialog" aria-labelledby="deck-dialog-title">
+      <form class="deck-dialog-form" id="deck-form">
+        <h2 id="deck-dialog-title">New deck</h2>
+        <p class="dialog-description" id="deck-dialog-description">
+          Give your study deck a name.
+        </p>
+        <label for="deck-name">Deck name</label>
+        <input
+          id="deck-name"
+          name="deck-name"
+          type="text"
+          maxlength="80"
+          autocomplete="off"
+          required
+          aria-describedby="deck-dialog-description"
+        >
+        <div class="dialog-actions">
+          <button class="button button-secondary" id="cancel-deck-button" type="button">
+            Cancel
+          </button>
+          <button class="button button-primary" type="submit">Save</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="deck-dialog" id="card-dialog" aria-labelledby="card-dialog-title">
+      <form class="deck-dialog-form" id="card-form">
+        <h2 id="card-dialog-title">New card</h2>
+        <p class="dialog-description" id="card-dialog-description">
+          Add a prompt and its answer to this deck.
+        </p>
+        <label for="card-front-input">Front</label>
+        <textarea
+          id="card-front-input"
+          name="front"
+          rows="3"
+          required
+          aria-describedby="card-dialog-description"
+        ></textarea>
+        <label for="card-back-input">Back</label>
+        <textarea
+          id="card-back-input"
+          name="back"
+          rows="4"
+          required
+        ></textarea>
+        <div class="dialog-actions">
+          <button class="button button-secondary" id="cancel-card-button" type="button">
+            Cancel
+          </button>
+          <button class="button button-primary" type="submit">Save</button>
+        </div>
+      </form>
+    </dialog>
+  </body>
+</html>

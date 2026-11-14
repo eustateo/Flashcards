@@ -1,0 +1,19 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Local operating-system and editor files
+.DS_Store
+node_modules/
+
+# Unused local Python starter files (the web app has no Python dependency)
+main.py
+pyproject.toml
+.python-version
